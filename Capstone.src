@@ -1,0 +1,127 @@
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<cmath>
+#include<iomanip>
+
+using namespace std;
+
+struct menuItem {
+	string itemNum;
+	string name;
+	string description;
+	string price;
+	string has_shots;
+};
+
+double prices(int selection);
+bool validSelection(int selection);
+
+int main(){
+
+	const double milkAlt = 0.25;
+	double shotsCost;
+	int numOfShots;
+	char response2;
+	double totalPrice;
+	double totalTax;
+	const double tax = 0.08;
+	double price;
+	double total;
+	const double shotsExtra = 0.50;
+	char response;
+	ifstream infile;
+	string item;
+	int selection;
+
+	menuItem menu[8];
+	
+	infile.open("CafeMenu.csv", ios::in);
+		
+	int i = 0;
+	while(!infile.eof()){
+		getline(infile,item,',');
+		menu[i].itemNum = item;
+		getline(infile, item, ',');
+		menu[i].name = item;
+		getline(infile, item, ',');
+		menu[i].description = item;
+		getline(infile, item, ',');
+		menu[i].price = item;
+		getline(infile, item);
+		menu[i].has_shots = item;;
+		i++;
+		
+	}
+	cout << "#####################" << endl;
+	cout << "####### Menu ########" << endl;
+	cout << "#####################" << endl;
+
+	for(int j = 0; j < 8; j++){
+		cout << "Item Number: " << menu[j].itemNum <<endl;
+		cout << "Name:" << menu[j].name << endl;
+		cout << "Description:" << menu[j].description << endl;
+		cout << "Price:" << menu[j].price << endl;
+		cout << "Has Shots::" << menu[j].has_shots << endl;
+		cout << "-------------------------------" << endl;
+	}
+
+	infile.close();
+
+	cout << "Enter your order number here: " << endl;
+	cin >> selection;
+
+	if(selection == 1){
+		price = 1.49;
+	}
+	else if(selection == 2){
+		price = 3.49;
+	}
+	else if(selection == 3){
+		price = 2.99;
+	}
+	else if(selection == 4){
+		price = 3.99;
+	}
+	else if(selection == 5){
+		price = 2.99;
+	}
+	else if(selection == 6){
+		price = 3.50;
+	}
+	else if(selection == 7){
+		price = 4.00;
+	}
+	else if(selection == 8){
+		price = 4.50;
+	}
+	else if(selection == 9){
+		price = 6.50;
+	};
+
+	cout << "Would you like to modify your order?(Y/N): " << endl;
+	cin >> response;
+
+	if(response == 'Y' || response == 'y'){
+		cout << "How many extra shot(s)?" << endl;
+		cin >> numOfShots;
+		cout << "Milk alternative?(Y/N): " << endl;
+		cin >> response2;
+	};
+
+	shotsCost = numOfShots * shotsExtra;
+	total = price + shotsCost;
+
+		if(response2 == 'Y' || response2 =='y'){
+			total = total + milkAlt;
+		};
+	
+	totalTax = total * tax;
+	totalPrice = total + totalTax;
+
+	cout << fixed;
+	cout << setprecision(2) << "Your total is: " << totalPrice << endl;
+	
+	return 0;
+}
+
