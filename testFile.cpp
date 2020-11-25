@@ -14,11 +14,22 @@ struct menuItem {
 	string has_shots;
 };
 
+struct quantity{
+	int black;
+	int latte;
+	int mocha;
+	int chai;
+	int americano;
+	int espresso;
+	int macchiato;
+	int irish;
+	int cappuccino;
+};
+
 void printMenu();
 
 int main(){
 
-	const double prices[] = {1.49, 3.49, 2.99, 3.99, 2.99, 3.50, 4.00, 4.50, 6.50};
 	const double milkAlt = 0.25;
 	const double shotsExtra = 0.50;
 	double shotsCost;
@@ -36,7 +47,6 @@ int main(){
 	double payment2;
 	double change;
 	double grace;
-	fstream custFile;
 	string itemName;
 
 	printMenu();
@@ -158,6 +168,7 @@ void printMenu(){
 
 		ifstream infile;
 		string item;
+	
 
 		menuItem menu[8];
 	
@@ -192,5 +203,4 @@ void printMenu(){
 	}
 
 	infile.close();
-}
-
+};
