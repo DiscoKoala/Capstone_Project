@@ -23,156 +23,50 @@ struct bookInfo{
 	string price;
 };
 
+double bookstore();
+double cafe();
 void printBooks();
 void printMenu();
 
 int main(){
 
-	const double milkAlt = 0.25;
-	const double shotsExtra = 0.50;
-	double shotsCost;
-	int numOfShots;
+	double shotsCost, total, total2, total3, total4, price, cost, 
+	totalPrice, payment, payment2, change, grace, totalTax, milkAlt;
+	int numOfShots, selection;
 	double preTaxtotal = 0;
-	double total;
-	double price;
-	double cost;
-	string bookName;
-	double totalPrice;
+	fstream infile;
+	string bookName, itemName, choice;
 	const double tax = 0.08;
-	double totalTax;
-	int selection;
-	int bookSelect;
-	char response;
-	char response2;
-	double payment;
-	double payment2;
-	double change;
-	double grace;
-	string itemName;
-	string choice;
-
-	cout << "Cafe or Bookstore? " << endl << endl;
+	char response, response2, response3, response4;
+	
+	cout << "Cafe or Bookstore? " << endl;
 	cin >> choice;
 
-	if(choice == "Bookstore" || choice == "bookstore"){
-		
-		printBooks();
+	if(choice == "Cafe" || choice == "cafe"){
+		total = cafe();
+		cout << "Would you like to go to the bookstore? (Y/N)" << endl;
+		cin >> response4;
 
-		cout << "Enter the number of the book you'd like to buy: " << endl;
-		cin >> bookSelect;
-
-		if(bookSelect == 101){
-			cost = 13.00;
-			bookName = "Moby Dick";
-		}
-		if(bookSelect == 102){
-			cost = 15.00;
-			bookName = "Pride and Prejudice";
-		}
-		if(bookSelect == 103){
-			cost = 17.65;
-			bookName = "Harry Potter: Book 1";
-		}
-		if(bookSelect == 203){
-			cost = 17.65;
-			bookName = "Harry Potter: Book 2";
-		}
-		if(bookSelect == 303){
-			cost = 19.65;
-			bookName = "Harry Potter: Book 3";
-		}
-		if(bookSelect == 104){
-			cost = 12.99;
-			bookName = "To Kill a Mockingbird";
-		}
-		if(bookSelect == 105){
-			cost = 12.99;
-			bookName = "The Great Gatsby";
-		}
-		if(bookSelect == 106){
-			cost = 14.50;
-			bookName = "The Diary of Anne Frank";
-		}
-		if(bookSelect == 107){
-			cost = 22.49;
-			bookName = "One Hundred Years of Solitude";
-		}
-		if(bookSelect == 108){
-			cost = 8.99;
-			bookName = "Flatland";
+		if(response4 == 'Y' || response4 =='y'){
+			total4 = bookstore();
 		};
-		
+	}
+	else if(choice == "Bookstore" || choice == "bookstore"){
+		total3 = bookstore();
+		cout << "Would you like to go to the Cafe? (Y/N) " << endl;
+		cin >> response3;
 
-	}
-
-	printMenu();
-
-	cout << "Please enter your order number here: " << endl;
-	cin >> selection;
-
-	
-	if(selection == 1){
-		price = 1.49;
-		itemName = "Black";
-	}
-	else if(selection == 2){
-		price = 3.49;
-		itemName = "Mocha";
-	}
-	else if(selection == 3){
-		price = 2.99;
-		itemName = "Latte";
-	}
-	else if(selection == 4){
-		price = 3.99;
-		itemName = "Chai";
-	}
-	else if(selection == 5){
-		price = 2.99;
-		itemName = "Americano";
-	}
-	else if(selection == 6){
-		price = 3.50;
-		itemName = "Cappuccino";
-	}
-	else if(selection == 7){
-		price = 4.00;
-		itemName = "Espresso";
-	}
-	else if(selection == 8){
-		price = 4.50;
-		itemName = "Macchiato";
-	}
-	else if(selection == 9){
-		price = 6.50;
-		itemName = "Irish";
-	};
-
-	cout << "Would you like to modify your order?(Y/N): " << endl;
-	cin >> response;
-
-	if(response == 'Y' || response == 'y'){
-		cout << "How many extra shot(s)?" << endl;
-		cin >> numOfShots;
-		cout << "Milk alternative?(Y/N): " << endl;
-		cin >> response2;
-	};
-
-	shotsCost = numOfShots * shotsExtra;
-	total = price + shotsCost;
-
-		if(response2 == 'Y' || response2 =='y'){
-			total = total + milkAlt;
+		if(response3 == 'Y' || response3 =='y'){
+			total4 = cafe();
 		};
+	};
 	
-
-	preTaxtotal = total;
+	preTaxtotal = total + total3;
 	totalTax = preTaxtotal * tax;
 	totalPrice = preTaxtotal + totalTax;
 
 	cout << fixed;
-	cout << setprecision(2) << "Your total is: " << totalPrice << endl;
-	cout << " " << endl;
+	cout << setprecision(2) << "Your total is: " << totalPrice << endl << endl;
 	cout << "Please enter your payment amount: ";
 	cin >> payment;
 
@@ -182,7 +76,6 @@ int main(){
 			change = (payment - totalPrice);
 			cout << "Here's your change: " << endl;
 			cout << " " << change << endl << endl;
-			
 		};
 
 		if(payment == totalPrice){
@@ -196,6 +89,9 @@ int main(){
 		if(payment < grace){
 			cout << "Sorry, maybe next time. " << endl;
 		};
+
+		infile.open("items.txt", ios::out);
+			 		
 	
 			cout << "##########################" << endl;
 			cout << "#### Printing Receipt ####" << endl;
@@ -207,6 +103,7 @@ int main(){
 			cout << "Milk Alternative: " << "+" << milkAlt << endl;
 			cout << "--------------------------" << endl;
 			cout << "Book: " << bookName << " = " << cost << endl;
+			cout << "--------------------------" << endl;
 			cout << "Pre-tax total: " << preTaxtotal << endl;
 			cout << "--------------------------" << endl;
 			cout << "Added tax : " << totalTax << endl;
@@ -247,7 +144,7 @@ void printMenu(){
 		
 	}
 	cout << "                     " << endl;
-	cout << "####### Menu ########" << endl;
+	cout << "######### Menu ##########" << endl;
 	cout << "                     " << endl;
 
 	for(int j = 0; j < 8; j++){
@@ -267,16 +164,15 @@ void printBooks(){
 		ifstream infile;
 		string item;
 	
-
-		bookInfo book[9];
+		bookInfo book[10];
 	
 	infile.open("Library.csv", ios::in);
 		
 	int i = 0;
-	while(!infile.eof()){
+	for(i = 0; i < 10; ++i){
 		getline(infile, item, ',');
 		book[i].bookNum = item;
-		getline(infile,item,',');
+		getline(infile, item, ',');
 		book[i].title = item;
 		getline(infile, item, ',');
 		book[i].author = item;
@@ -285,15 +181,13 @@ void printBooks(){
 		getline(infile, item, ',');
 		book[i].cover = item;
 		getline(infile, item);
-		book[i].price = item;;
-		i++;
-		
+		book[i].price = item;
 	}
 	cout << "                     " << endl;
 	cout << "####### Choice Books ########" << endl;
 	cout << "                     " << endl;
 
-	for(int j = 0; j < 8; j++){
+	for(int j = 0; j < 10; ++j){
 		cout << "Book Number: " << book[j].bookNum << endl;
 		cout << "Title: " << book[j].title << endl;
 		cout << "Author: " << book[j].author << endl;
@@ -305,4 +199,142 @@ void printBooks(){
 
 	infile.close();
 
+};
+
+double cafe(){
+	
+	const double milkAlt0 = 0.25;
+	const double shotsExtra0 = 0.50;
+	int selection0, numOfShots0;
+	double total0, preTaxtotal0, price0, shotsCost0;
+	string itemName0;
+	char response0, response20;
+	fstream cafFile;
+
+	printMenu();
+
+	cout << "Please enter your order number here: " << endl;
+	cin >> selection0;
+
+	
+	if(selection0 == 1){
+		price0 = 1.49;
+		itemName0 = "Black";
+	}
+	else if(selection0 == 2){
+		price0 = 3.49;
+		itemName0 = "Mocha";
+	}
+	else if(selection0 == 3){
+		price0 = 2.99;
+		itemName0 = "Latte";
+	}
+	else if(selection0 == 4){
+		price0 = 3.99;
+		itemName0 = "Chai";
+	}
+	else if(selection0 == 5){
+		price0 = 2.99;
+		itemName0 = "Americano";
+	}
+	else if(selection0 == 6){
+		price0 = 3.50;
+		itemName0 = "Cappuccino";
+	}
+	else if(selection0 == 7){
+		price0 = 4.00;
+		itemName0 = "Espresso";
+	}
+	else if(selection0 == 8){
+		price0 = 4.50;
+		itemName0 = "Macchiato";
+	}
+	else if(selection0 == 9){
+		price0 = 6.50;
+		itemName0 = "Irish";
+	};
+
+	cout << "Would you like to modify your order?(Y/N): " << endl;
+	cin >> response0;
+
+	if(response0 == 'Y' || response0 == 'y'){
+		cout << "How many extra shot(s)?" << endl;
+		cin >> numOfShots0;
+		cout << "Milk alternative?(Y/N): " << endl;
+		cin >> response20;
+	};
+
+	shotsCost0 = numOfShots0 * shotsExtra0;
+	total0 = price0 + shotsCost0;
+
+		if(response20 == 'Y' || response20 =='y'){
+			total0 = total0 + milkAlt0;
+		};
+
+	cafFile.open("items.txt");
+		cafFile << itemName0 << endl;
+		cafFile << price0 << endl;
+		cafFile << numOfShots0 << endl;
+		cafFile << response20 << endl;
+	
+	cafFile.close();
+
+	preTaxtotal0 = total0;
+
+	return total0;
+};
+double bookstore(){
+
+	double total1;
+	int bookSelect;
+	double cost;
+	string bookName;
+
+	printBooks();
+
+	cout << "Enter the number of the book you'd like to buy: " << endl;
+	cin >> bookSelect;
+
+	if(bookSelect == 101){
+		cost = 13.00;
+		bookName = "Moby Dick";
+	}
+	if(bookSelect == 102){
+		cost = 15.00;
+		bookName = "Pride and Prejudice";
+	}
+	if(bookSelect == 103){
+		cost = 17.65;
+		bookName = "Harry Potter: Book 1";
+	}
+	if(bookSelect == 203){
+		cost = 17.65;
+		bookName = "Harry Potter: Book 2";
+	}
+	if(bookSelect == 303){
+		cost = 19.65;
+		bookName = "Harry Potter: Book 3";
+	}
+	if(bookSelect == 104){
+		cost = 12.99;
+		bookName = "To Kill a Mockingbird";
+	}
+	if(bookSelect == 105){
+		cost = 12.99;
+		bookName = "The Great Gatsby";
+	}
+	if(bookSelect == 106){
+		cost = 14.50;
+		bookName = "The Diary of Anne Frank";
+	}
+	if(bookSelect == 107){
+		cost = 22.49;
+		bookName = "One Hundred Years of Solitude";
+	}
+	if(bookSelect == 108){
+		cost = 8.99;
+		bookName = "Flatland";
+	};
+		
+	return total1;
 };
