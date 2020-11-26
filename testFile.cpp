@@ -23,16 +23,33 @@ struct bookInfo{
 	string price;
 };
 
-double bookPrices(int& bookSelect);
-double prices(int& selection);
-int bookStore();
-int cafe();
-int numOfShot();
-char altMilk();
-string itemName(int& selection);
-string bookNames(int& bookSelect);
-void printBooks();
-void printMenu();
+class Books{
+	public:
+	
+	string item;
+
+	double bookPrices(int bookSelect);
+	int bookStore();
+	string bookNames(int bookSelect);
+	void printBooks();
+};
+
+class Coffee{
+	public:
+	int selection, num, choice;
+	double price;
+	string itemNames, item;
+	char response20;
+	ifstream infile;
+	
+	double prices(int);
+	int cafe();
+	int numOfShot();
+	char altMilk();
+	string itemName(int);
+	void printMenu();
+};
+
 
 int main(){
 
@@ -50,6 +67,7 @@ int main(){
 
 	if(choice == "Cafe" || choice == "cafe"){
 		selection = cafe();
+		cout << selection;
 		price = prices(selection);
 		itemLabel = itemName(selection);
 
@@ -149,12 +167,10 @@ int main(){
 	return 0;
 }
 
-void printMenu();{
+void Coffee::printMenu();{
 
-		ifstream infile;
-		string item;
 	
-
+		ifstream infile;
 		menuItem menu[8];
 	
 	infile.open("CafeMenu.csv", ios::in);
@@ -190,10 +206,8 @@ void printMenu();{
 	infile.close();
 };
 
-void printBooks();{
+void Books::printBooks();{
 
-		ifstream infile;
-		string item;
 	
 		bookInfo book[10];
 	
@@ -232,9 +246,9 @@ void printBooks();{
 
 };
 
-int cafe(){
+int Coffee::cafe(){
 	
-	int selection;
+	
 
 	printMenu();
 
@@ -244,8 +258,8 @@ int cafe(){
 	return selection;
 };
 
-int numOfShot(){
-	int num;
+int Coffee::numOfShot(){
+	
 
 	cout << "How many extra shot(s)?" << endl;
 	cin >> num;
@@ -253,8 +267,8 @@ int numOfShot(){
 	return num;
 };
 
-char altMilk(){
-	char response20;
+char Coffee::altMilk(){
+	
 
 	cout << "Milk alternative?(Y/N): " << endl;
 	cin >> response20;
@@ -262,7 +276,7 @@ char altMilk(){
 	return response20;
 };
 
-int bookStore(){
+int Books::bookStore(){
 
 	int bookSelect;
 	
@@ -275,7 +289,7 @@ int bookStore(){
 	return bookSelect;
 };
 
-string bookNames(int bookSelect);{
+string Books::bookNames(int bookSelect){
 
 	int select;
 	string bookName;
@@ -311,13 +325,15 @@ string bookNames(int bookSelect);{
 		bookName = "Flatland";
 	};
 		
-	return bookName;
+	return (bookName);
 };
 
-double bookPrices(int& bookSelect){
+double Books::bookPrices(int bookSelect){
 
 	int select;
 	double cost;
+
+	select = bookSelect;
 
 	if(select == 101){
 		cost = 13.00;
@@ -353,10 +369,9 @@ double bookPrices(int& bookSelect){
 	return cost;
 };
 
-string itemName(int& selection){
+string Coffee::itemName(int selection){
 
-	int choice;
-	string itemName;
+	choice = selection;
 
 	if(choice == 1){
 		itemName = "Black";
@@ -389,10 +404,9 @@ string itemName(int& selection){
 	return itemName;
 };
 
-double prices(int& selection){
+double Coffee::prices(int selection){
 
-	int selection;
-	double price;
+	choice = selection;
 
 	if(choice == 1){
 		price = 1.49;
