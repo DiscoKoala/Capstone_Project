@@ -6,28 +6,28 @@
 
 using namespace std;
 
-struct menuItem {
-	string itemNum;
-	string name;
-	string description;
-	string price;
-	string has_shots;
-};
+//class Inventory{
 
-struct bookInfo{
-	string bookNum;
-	string title;
-	string author;
-	string genre;
-	string cover;
-	string price;
-};
-
+//};
 class Books{
 	public:
+	int select, selection, num, bookSelect;
+	double cost;
+	char response20;
+	string item, bookName;
+	fstream onfile;
 	
-	string item;
 
+	struct bookInfo{
+		string bookNum;
+		string title;
+		string author;
+		string genre;
+		string cover;
+		string price;
+	};
+
+	bool validInput(int bookSelect);
 	double bookPrices(int bookSelect);
 	int bookStore();
 	string bookNames(int bookSelect);
@@ -42,6 +42,15 @@ class Coffee{
 	char response20;
 	ifstream infile;
 	
+	struct menuItem {
+		string itemNum;
+		string name;
+		string description;
+		string price;
+		string has_shots;
+	};
+	
+	bool validOrder(int);
 	double prices(int);
 	int cafe();
 	int numOfShot();
@@ -53,105 +62,102 @@ class Coffee{
 
 int main(){
 
-	double shotsCost, total, total2, total3, total4, price, bookPrice, cost, 
-	totalPrice, payment, payment2, change, grace, totalTax, milkAlt;
+	Books book;
+	Coffee caf;
+	double shotsCost, total, total2 = 0, price, bookPrice, 
+	totalPrice, payment, change, grace, totalTax, milkAlt;
 	int numOfShots, selection = 0, bookSelect;
 	double preTaxtotal = 0;
-	fstream infile;
 	string bookName, itemLabel, choice;
 	const double tax = 0.08, milkCost = 0.25, shotsExtra = 0.50;
-	char response, response2, response3, response4;
+	char response, response3, response4;
 	
 	cout << "Cafe or Bookstore? " << endl;
 	cin >> choice;
 
 	if(choice == "Cafe" || choice == "cafe"){
-		selection = cafe();
-		cout << selection;
-		price = prices(selection);
-		itemLabel = itemName(selection);
+		selection = caf.cafe();
+		price = caf.prices(selection);
+		itemLabel = caf.itemName(selection);
 
 		cout << "Would you like to modify your order?(Y/N): " << endl;
 		cin >> response;
+
 		if(response == 'Y' || response == 'y'){
-			numOfShots = numOfShot();
-			milkAlt = altMilk();
+			numOfShots = caf.numOfShot();
+			milkAlt = caf.altMilk();
 		}
+
 		cout << "Would you like to go to the bookstore? (Y/N)" << endl;
 		cin >> response4;
 
 		if(response4 == 'Y' || response4 =='y'){
-			bookSelect = bookStore();
-			bookPrice = bookPrices(bookSelect);
-			bookName = bookNames(bookSelect);
-		};
+			bookSelect = book.bookStore();
+			bookPrice = book.bookPrices(bookSelect);
+			bookName = book.bookNames(bookSelect);
+		}
+
+		shotsCost = numOfShots * shotsExtra;
+		total = bookPrice + price + shotsCost;
 	}
 	else if(choice == "Bookstore" || choice == "bookstore"){
-		total3 = bookStore();
+		bookSelect = book.bookStore();
+		bookPrice = book.bookPrices(bookSelect);
+		bookName = book.bookNames(bookSelect);
 		cout << "Would you like to go to the Cafe? (Y/N) " << endl;
 		cin >> response3;
 
 		if(response3 == 'Y' || response3 =='y'){
-			selection = cafe();
-			price = prices(selection);
-			itemLabel = itemName(selection);
+			selection = caf.cafe();
+			price = caf.prices(selection);
+			itemLabel = caf.itemName(selection);
+		
+			cout << "Would you like to modify your order?(Y/N): " << endl;
+			cin >> response;
 
-		cout << "Would you like to modify your order?(Y/N): " << endl;
-		cin >> response;
+			if(response == 'Y' || response == 'y'){
+				numOfShots = caf.numOfShot();
+				milkAlt = caf.altMilk();
 
-		if(response == 'Y' || response == 'y'){
-			numOfShots = numOfShot();
-			milkAlt = altMilk();
+				if(milkAlt == 'Y' || milkAlt =='y'){
+					total2 = milkCost;
+				}
+			}
 
-		};
+			shotsCost = numOfShots * shotsExtra;
+		}
 
-	shotsCost = numOfShots * shotsExtra;
-	total = bookPrice + price + shotsCost;
+		total = bookPrice + price + shotsCost + total2;
 
-		if(milkAlt == 'Y' || milkAlt =='y'){
-			total = total + milkCost;
+			
 	};
-	
-	preTaxtotal = total + total3;
+
+	preTaxtotal = total;
 	totalTax = preTaxtotal * tax;
 	totalPrice = preTaxtotal + totalTax;
 
 	cout << fixed;
 	cout << setprecision(2) << "Your total is: " << totalPrice << endl << endl;
-	cout << "Please enter your payment amount: ";
+	cout << "Please enter your payment amount: " << endl;
 	cin >> payment;
 
 	grace = totalPrice - 0.50;
 
 		if(payment > totalPrice){
 			change = (payment - totalPrice);
-			cout << "Here's your change: " << endl;
-			cout << " " << change << endl << endl;
-		};
+			cout << "Here's your change: " << endl << endl;
+			cout << change << endl << endl;
 
-		if(payment == totalPrice){
-			cout << "Thank you for your business! " << endl << endl;
-		};
-
-		if(payment >= grace && payment < totalPrice){
-			cout << "No worries, I've got you this time." << endl << endl;
-		};
-		
-		if(payment < grace){
-			cout << "Sorry, maybe next time. " << endl;
-		};
-			 		
-	
 			cout << "##########################" << endl;
 			cout << "#### Printing Receipt ####" << endl;
 			cout << "##########################" << endl << endl;
 			cout << itemLabel << ": " << price << endl;
 			cout << "--------------------------" << endl;
-			cout << "Extra shots: " << "+" << numOfShots << " = " << shotsCost << endl;
+			cout << "Extra shots:" << "+ " << numOfShots << " = " << shotsCost << endl;
 			cout << "--------------------------" << endl;
-			cout << "Milk Alternative: " << "+" << milkAlt << endl;
+			cout << "Milk Alternative: " << "+" << milkCost << endl;
 			cout << "--------------------------" << endl;
-			cout << "Book: " << bookName << " = " << bookPrice << endl;
+			cout << "Book(s):" << bookName << " = " << bookPrice << endl;
 			cout << "--------------------------" << endl;
 			cout << "Pre-tax total: " << preTaxtotal << endl;
 			cout << "--------------------------" << endl;
@@ -162,21 +168,97 @@ int main(){
 			cout << "WiFi password: C0fFe3" << endl;
 			cout << "--------------------------" << endl;
 			cout << "##########################" << endl;
+		};
+
+		if(payment == totalPrice){
+			cout << endl;
+			cout << "Thank you for your business! " << endl << endl;
+			
+			cout << "##########################" << endl;
+			cout << "#### Printing Receipt ####" << endl;
+			cout << "##########################" << endl << endl;
+			cout << itemLabel << ": " << price << endl;
+			cout << "--------------------------" << endl;
+			cout << "Extra shots:" << "+ " << numOfShots << " = " << shotsCost << endl;
+			cout << "--------------------------" << endl;
+			cout << "Milk Alternative: " << "+" << milkCost << endl;
+			cout << "--------------------------" << endl;
+			cout << "Book(s):" << bookName << " = " << bookPrice << endl;
+			cout << "--------------------------" << endl;
+			cout << "Pre-tax total: " << preTaxtotal << endl;
+			cout << "--------------------------" << endl;
+			cout << "Added tax : " << totalTax << endl;
+			cout << "--------------------------" << endl;
+			cout << "Total cost: " << totalPrice << endl;
+			cout << "--------------------------" << endl;
+			cout << "WiFi password: C0fFe3" << endl;
+			cout << "--------------------------" << endl;
+			cout << "##########################" << endl;
+		};
+
+		if(payment >= grace && payment < totalPrice){
+			cout << endl;
+			cout << "No worries, I've got you this time." << endl << endl;
+			cout << "##########################" << endl;
+			cout << "#### Printing Receipt ####" << endl;
+			cout << "##########################" << endl << endl;
+			cout << itemLabel << ": " << price << endl;
+			cout << "--------------------------" << endl;
+			cout << "Extra shots:" << "+ " << numOfShots << " = " << shotsCost << endl;
+			cout << "--------------------------" << endl;
+			cout << "Milk Alternative: " << "+" << milkCost << endl;
+			cout << "--------------------------" << endl;
+			cout << "Book(s):" << bookName << " = " << bookPrice << endl;
+			cout << "--------------------------" << endl;
+			cout << "Pre-tax total: " << preTaxtotal << endl;
+			cout << "--------------------------" << endl;
+			cout << "Added tax : " << totalTax << endl;
+			cout << "--------------------------" << endl;
+			cout << "Total cost: " << totalPrice << endl;
+			cout << "--------------------------" << endl;
+			cout << "WiFi password: C0fFe3" << endl;
+			cout << "--------------------------" << endl;
+			cout << "##########################" << endl;
+		};
 		
-
+		if(payment < grace){
+			cout << "Sorry, maybe next time. " << endl;
+		};
+			 		
 	return 0;
+};
+
+//
+//Cafe defs.
+//
+
+bool Coffee::validOrder(int selection){
+	
+	switch(selection){
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+			return true;
+		default:
+			return false;
+	}
 }
+void Coffee::printMenu(){
 
-void Coffee::printMenu();{
-
-	
-		ifstream infile;
-		menuItem menu[8];
-	
+		string item;
+		fstream infile;
+		Coffee::menuItem menu[8];
+		
 	infile.open("CafeMenu.csv", ios::in);
 		
 	int i = 0;
-	while(!infile.eof()){
+	for(i= 0; i < 8; i++){
 		getline(infile,item,',');
 		menu[i].itemNum = item;
 		getline(infile, item, ',');
@@ -186,81 +268,42 @@ void Coffee::printMenu();{
 		getline(infile, item, ',');
 		menu[i].price = item;
 		getline(infile, item);
-		menu[i].has_shots = item;;
-		i++;
+		menu[i].has_shots = item;
 		
 	}
-	cout << "                     " << endl;
+	cout << "#########################" << endl;
 	cout << "######### Menu ##########" << endl;
-	cout << "                     " << endl;
+	cout << "#########################" << endl;
 
 	for(int j = 0; j < 8; j++){
-		cout << "Item Number: " << menu[j].itemNum <<endl;
-		cout << "Name:" << menu[j].name << endl;
-		cout << "Description:" << menu[j].description << endl;
-		cout << "Price:" << menu[j].price << endl;
-		cout << "Has Shots::" << menu[j].has_shots << endl;
+		cout << "Item #:  " << menu[j].itemNum <<endl;
+		cout << "Name:   " << menu[j].name << endl;
+		cout << "Descrip:" << menu[j].description << endl;
+		cout << "Price:  " << menu[j].price << endl;
+		cout << "Shots:  " << menu[j].has_shots << endl;
 		cout << "-------------------------------" << endl;
 	}
-
 	infile.close();
-};
-
-void Books::printBooks();{
-
-	
-		bookInfo book[10];
-	
-	infile.open("Library.csv", ios::in);
-		
-	int i = 0;
-	for(i = 0; i < 10; ++i){
-		getline(infile, item, ',');
-		book[i].bookNum = item;
-		getline(infile, item, ',');
-		book[i].title = item;
-		getline(infile, item, ',');
-		book[i].author = item;
-		getline(infile, item, ',');
-		book[i].genre = item;
-		getline(infile, item, ',');
-		book[i].cover = item;
-		getline(infile, item);
-		book[i].price = item;
-	}
-	cout << "                     " << endl;
-	cout << "####### Choice Books ########" << endl;
-	cout << "                     " << endl;
-
-	for(int j = 0; j < 10; ++j){
-		cout << "Book Number: " << book[j].bookNum << endl;
-		cout << "Title: " << book[j].title << endl;
-		cout << "Author: " << book[j].author << endl;
-		cout << "Genre: " << book[j].genre << endl;
-		cout << "Cover: " << book[j].cover << endl;
-		cout << "Price: " << book[j].price << endl;
-		cout << "-------------------------------" << endl;
-	}
-
-	infile.close();
-
 };
 
 int Coffee::cafe(){
-	
-	
 
 	printMenu();
-
+	
 	cout << "Please enter your order number here: " << endl;
 	cin >> selection;
 
+	while(Coffee::validOrder(selection) == false){
+		cout << "Invalid Input. Please choose from the available options." << endl;
+		cin.clear();
+		cin.ignore();
+		cin >> selection;
+	}
 	return selection;
 };
 
 int Coffee::numOfShot(){
 	
-
 	cout << "How many extra shot(s)?" << endl;
 	cin >> num;
 
@@ -269,32 +312,125 @@ int Coffee::numOfShot(){
 
 char Coffee::altMilk(){
 	
-
 	cout << "Milk alternative?(Y/N): " << endl;
 	cin >> response20;
 	
 	return response20;
 };
 
+string Coffee::itemName(int selection){
+
+	choice = selection;
+
+	if(choice == 1){
+		itemNames = "Black";
+	}
+	else if(choice == 2){
+		itemNames = "Mocha";
+	}
+	else if(choice == 3){
+		itemNames = "Latte";
+	}
+	else if(choice == 4){
+		itemNames = "Chai";
+	}
+	else if(choice == 5){
+		itemNames = "Americano";
+	}
+	else if(choice == 6){
+		itemNames = "Cappuccino";
+	}
+	else if(choice == 7){
+		itemNames = "Espresso";
+	}
+	else if(choice == 8){
+		itemNames = "Macchiato";
+	}
+	else if(choice == 9){
+		itemNames = "Irish";
+	};
+
+	return itemNames;
+};
+
+double Coffee::prices(int selection){
+
+	choice = selection;
+
+	if(choice == 1){
+		price = 1.49;
+	}
+	else if(choice == 2){
+		price = 3.49;
+	}
+	else if(choice == 3){
+		price = 2.99;
+	}
+	else if(choice == 4){
+		price = 3.99;
+	}
+	else if(choice == 5){
+		price = 2.99;
+	}
+	else if(choice == 6){
+		price = 3.50;
+	}
+	else if(choice == 7){
+		price = 4.00;
+	}
+	else if(choice == 8){
+		price = 4.50;
+	}
+	else if(choice == 9){
+		price = 6.50;
+	};
+	return price;
+};
+
+//
+//Books defs.
+//
+
+bool Books::validInput(int bookSelect){
+	
+	switch(bookSelect){
+		case 101:
+		case 102:
+		case 103:
+		case 203:
+		case 303:
+		case 104:
+		case 105:
+		case 106:
+		case 107:
+		case 108:
+			return true;
+		default:
+			return false;
+	}
+}
 int Books::bookStore(){
 
-	int bookSelect;
-	
 	printBooks();
 
 	cout << "Enter the number of the book you'd like to buy: " << endl;
 	cin >> bookSelect;
 
+	while(Books::validInput(bookSelect) == false){
+		cout << "Invalid input. Please choose from available options" << endl;
+		cin.clear();
+		cin.ignore();
+		cin >> bookSelect;
+	}
 
 	return bookSelect;
 };
 
 string Books::bookNames(int bookSelect){
 
-	int select;
-	string bookName;
+	select = bookSelect;
 
-	if(bookSelect == 101){
+	if(select == 101){
 		bookName = "Moby Dick";
 	}
 	else if(select == 102){
@@ -325,13 +461,10 @@ string Books::bookNames(int bookSelect){
 		bookName = "Flatland";
 	};
 		
-	return (bookName);
+	return bookName;
 };
 
 double Books::bookPrices(int bookSelect){
-
-	int select;
-	double cost;
 
 	select = bookSelect;
 
@@ -368,72 +501,43 @@ double Books::bookPrices(int bookSelect){
 		
 	return cost;
 };
+void Books::printBooks(){
 
-string Coffee::itemName(int selection){
+		fstream onfile;
+		string item;
+		Books::bookInfo book[10];
 
-	choice = selection;
+	onfile.open("Library.csv", ios::in);
+		
+	int i = 0;
+	for(i = 0; i < 10; ++i){
+		getline(onfile, item, ',');
+		book[i].bookNum = item;
+		getline(onfile, item, ',');
+		book[i].title = item;
+		getline(onfile, item, ',');
+		book[i].author = item;
+		getline(onfile, item, ',');
+		book[i].genre = item;
+		getline(onfile, item, ',');
+		book[i].cover = item;
+		getline(onfile, item);
+		book[i].price = item;
+	}
+	cout << "#############################" << endl;
+	cout << "####### Choice Books ########" << endl;
+	cout << "#############################" << endl;
 
-	if(choice == 1){
-		itemName = "Black";
+	for(int j = 0; j < 10; ++j){
+		cout << "Book #:  " << book[j].bookNum << endl;
+		cout << "Title:  " << book[j].title << endl;
+		cout << "Author: " << book[j].author << endl;
+		cout << "Genre:  " << book[j].genre << endl;
+		cout << "Cover:  " << book[j].cover << endl;
+		cout << "Price:  " << book[j].price << endl;
+		cout << "-------------------------------" << endl;
 	}
-	else if(choice == 2){
-		itemName = "Mocha";
-	}
-	else if(choice == 3){
-		itemName = "Latte";
-	}
-	else if(choice == 4){
-		itemName = "Chai";
-	}
-	else if(choice == 5){
-		itemName = "Americano";
-	}
-	else if(choice == 6){
-		itemName = "Cappuccino";
-	}
-	else if(choice == 7){
-		itemName = "Espresso";
-	}
-	else if(choice == 8){
-		itemName = "Macchiato";
-	}
-	else if(choice == 9){
-		itemName = "Irish";
-	};
 
-	return itemName;
-};
+	onfile.close();
 
-double Coffee::prices(int selection){
-
-	choice = selection;
-
-	if(choice == 1){
-		price = 1.49;
-	}
-	else if(choice == 2){
-		price = 3.49;
-	}
-	else if(choice == 3){
-		price = 2.99;
-	}
-	else if(choice == 4){
-		price = 3.99;
-	}
-	else if(choice == 5){
-		price = 2.99;
-	}
-	else if(choice == 6){
-		price = 3.50;
-	}
-	else if(choice == 7){
-		price = 4.00;
-	}
-	else if(choice == 8){
-		price = 4.50;
-	}
-	else if(choice == 9){
-		price = 6.50;
-	};
-	return price;
 };
