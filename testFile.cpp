@@ -6,9 +6,7 @@
 
 using namespace std;
 
-//class Inventory{
-
-//};
+void makeFile(string, double, int, double, double, string, double, double, int);
 class Books{
 	public:
 	int select, selection, num, bookSelect;
@@ -75,7 +73,7 @@ int main(){
 	cout << "Cafe or Bookstore? " << endl;
 	cin >> choice;
 
-	if(choice == "Cafe" || choice == "cafe"){
+	if(choice == "Cafe" || choice == "cafe" || choice == "Caf" || choice == "caf"){
 		selection = caf.cafe();
 		price = caf.prices(selection);
 		itemLabel = caf.itemName(selection);
@@ -100,7 +98,7 @@ int main(){
 		shotsCost = numOfShots * shotsExtra;
 		total = bookPrice + price + shotsCost;
 	}
-	else if(choice == "Bookstore" || choice == "bookstore"){
+	else if(choice == "Bookstore" || choice == "bookstore" || choice == "book" || choice == "Book"){
 		bookSelect = book.bookStore();
 		bookPrice = book.bookPrices(bookSelect);
 		bookName = book.bookNames(bookSelect);
@@ -144,6 +142,9 @@ int main(){
 	grace = totalPrice - 0.50;
 
 		if(payment > totalPrice){
+			
+			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, bookPrice, totalPrice, payment);
+
 			change = (payment - totalPrice);
 			cout << "Here's your change: " << endl << endl;
 			cout << change << endl << endl;
@@ -151,73 +152,91 @@ int main(){
 			cout << "##########################" << endl;
 			cout << "#### Printing Receipt ####" << endl;
 			cout << "##########################" << endl << endl;
-			cout << itemLabel << ": " << price << endl;
+			cout << itemLabel << ": $" << price << endl;
 			cout << "--------------------------" << endl;
-			cout << "Extra shots:" << "+ " << numOfShots << " = " << shotsCost << endl;
+			cout << "Extra shots:" << " +" << numOfShots << " = $" << shotsCost << endl;
 			cout << "--------------------------" << endl;
-			cout << "Milk Alternative: " << "+" << milkCost << endl;
+			cout << "Milk Alternative: " << "+$" << milkCost << endl;
 			cout << "--------------------------" << endl;
-			cout << "Book(s):" << bookName << " = " << bookPrice << endl;
+			cout << bookName << " = $" << bookPrice << endl;
 			cout << "--------------------------" << endl;
-			cout << "Pre-tax total: " << preTaxtotal << endl;
+			cout << "Pre-tax total: $" << preTaxtotal << endl;
 			cout << "--------------------------" << endl;
-			cout << "Added tax : " << totalTax << endl;
+			cout << "Added tax: $" << totalTax << endl;
 			cout << "--------------------------" << endl;
-			cout << "Total cost: " << totalPrice << endl;
+			cout << "Total cost: $" << totalPrice << endl;
+			cout << "--------------------------" << endl;
+			cout << "Payment: $" << payment << endl;
+			cout << "--------------------------" << endl;
+			cout << "Change: $" << change << endl;
 			cout << "--------------------------" << endl;
 			cout << "WiFi password: C0fFe3" << endl;
-			cout << "--------------------------" << endl;
+			cout << "--------------------------" << endl << endl;
 			cout << "##########################" << endl;
 		};
 
 		if(payment == totalPrice){
+
+			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, bookPrice, totalPrice, payment);
+
 			cout << endl;
 			cout << "Thank you for your business! " << endl << endl;
 			
 			cout << "##########################" << endl;
 			cout << "#### Printing Receipt ####" << endl;
 			cout << "##########################" << endl << endl;
-			cout << itemLabel << ": " << price << endl;
+			cout << itemLabel << ": $" << price << endl;
 			cout << "--------------------------" << endl;
-			cout << "Extra shots:" << "+ " << numOfShots << " = " << shotsCost << endl;
+			cout << "Extra shots:" << " +" << numOfShots << " = $" << shotsCost << endl;
 			cout << "--------------------------" << endl;
-			cout << "Milk Alternative: " << "+" << milkCost << endl;
+			cout << "Milk Alternative: " << "+$" << milkCost << endl;
 			cout << "--------------------------" << endl;
-			cout << "Book(s):" << bookName << " = " << bookPrice << endl;
+			cout << bookName << " = $" << bookPrice << endl;
 			cout << "--------------------------" << endl;
-			cout << "Pre-tax total: " << preTaxtotal << endl;
+			cout << "Pre-tax total: $" << preTaxtotal << endl;
 			cout << "--------------------------" << endl;
-			cout << "Added tax : " << totalTax << endl;
+			cout << "Added tax: $" << totalTax << endl;
 			cout << "--------------------------" << endl;
-			cout << "Total cost: " << totalPrice << endl;
+			cout << "Total cost: $" << totalPrice << endl;
+			cout << "--------------------------" << endl;
+			cout << "Payment: $" << payment << endl;
+			cout << "--------------------------" << endl;
+			cout << "Change: $" << change << endl;
 			cout << "--------------------------" << endl;
 			cout << "WiFi password: C0fFe3" << endl;
-			cout << "--------------------------" << endl;
+			cout << "--------------------------" << endl << endl;
 			cout << "##########################" << endl;
 		};
 
 		if(payment >= grace && payment < totalPrice){
+
+			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, bookPrice, totalPrice, payment);
+			
 			cout << endl;
 			cout << "No worries, I've got you this time." << endl << endl;
 			cout << "##########################" << endl;
 			cout << "#### Printing Receipt ####" << endl;
 			cout << "##########################" << endl << endl;
-			cout << itemLabel << ": " << price << endl;
+			cout << itemLabel << ": $" << price << endl;
 			cout << "--------------------------" << endl;
-			cout << "Extra shots:" << "+ " << numOfShots << " = " << shotsCost << endl;
+			cout << "Extra shots:" << " +" << numOfShots << " = $" << shotsCost << endl;
 			cout << "--------------------------" << endl;
 			cout << "Milk Alternative: " << "+" << milkCost << endl;
 			cout << "--------------------------" << endl;
-			cout << "Book(s):" << bookName << " = " << bookPrice << endl;
+			cout << bookName << " = " << bookPrice << endl;
 			cout << "--------------------------" << endl;
-			cout << "Pre-tax total: " << preTaxtotal << endl;
+			cout << "Pre-tax total: $" << preTaxtotal << endl;
 			cout << "--------------------------" << endl;
-			cout << "Added tax : " << totalTax << endl;
+			cout << "Added tax: $" << totalTax << endl;
 			cout << "--------------------------" << endl;
-			cout << "Total cost: " << totalPrice << endl;
+			cout << "Total cost: $" << totalPrice << endl;
+			cout << "--------------------------" << endl;
+			cout << "Payment: $" << payment << endl;
+			cout << "--------------------------" << endl;
+			cout << "Change: $" << change << endl;
 			cout << "--------------------------" << endl;
 			cout << "WiFi password: C0fFe3" << endl;
-			cout << "--------------------------" << endl;
+			cout << "--------------------------" << endl << endl;
 			cout << "##########################" << endl;
 		};
 		
@@ -226,6 +245,26 @@ int main(){
 		};
 			 		
 	return 0;
+};
+
+void makeFile(string itemLabel, double price, int numOfShots, double shotsCost, double milkCost, 
+			  string bookName, double bookPrice, double totalPrice, int payment)
+{
+
+	fstream custFile;
+
+	custFile.open("Customer.txt");
+
+	custFile << "Customer order history: " << endl;
+	custFile << "----------------------------" << endl;
+	custFile << "Beverage: " << itemLabel << ": " << price << endl;
+	custFile << "Extra shots: " << numOfShots << " = " << shotsCost << endl;
+	custFile << "Milk Alt: +" << milkCost << endl;
+	custFile << "Book(s): " << bookName << " = " << bookPrice << endl;
+	custFile << "Spendings: " << totalPrice << endl;
+	custFile << "Payment: " << payment << endl;
+
+	custFile.close();
 };
 
 //
@@ -253,12 +292,12 @@ void Coffee::printMenu(){
 
 		string item;
 		fstream infile;
-		Coffee::menuItem menu[8];
+		Coffee::menuItem menu[9];
 		
 	infile.open("CafeMenu.csv", ios::in);
 		
 	int i = 0;
-	for(i= 0; i < 8; i++){
+	for(i= 0; i < 9; i++){
 		getline(infile,item,',');
 		menu[i].itemNum = item;
 		getline(infile, item, ',');
@@ -275,7 +314,7 @@ void Coffee::printMenu(){
 	cout << "######### Menu ##########" << endl;
 	cout << "#########################" << endl;
 
-	for(int j = 0; j < 8; j++){
+	for(int j = 0; j < 9; j++){
 		cout << "Item #:  " << menu[j].itemNum <<endl;
 		cout << "Name:   " << menu[j].name << endl;
 		cout << "Descrip:" << menu[j].description << endl;
