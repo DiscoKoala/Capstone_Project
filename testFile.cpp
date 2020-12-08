@@ -1,3 +1,9 @@
+/* The point of this program is to simulate a trip to a cafe/bookstore.
+   The user is given the option of going to the cafe or the bookstore.
+   A list of options is given to the end user to choose from.
+   After the user chooses their desired options
+   the program compiles the cost and prints a reciept.*/
+
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -6,7 +12,8 @@
 
 using namespace std;
 
-void makeFile(string, double, int, double, double, string, double, double, int);
+void makeFile(string, double, int, double, double, string, double, double, double, double);
+
 class Books{
 	public:
 	int select, selection, num, bookSelect;
@@ -66,9 +73,10 @@ int main(){
 	totalPrice, payment, change, grace, totalTax, milkAlt;
 	int numOfShots, selection = 0, bookSelect;
 	double preTaxtotal = 0;
-	string bookName, itemLabel, choice;
+	string bookName, itemLabel, choice, line;
 	const double tax = 0.08, milkCost = 0.25, shotsExtra = 0.50;
 	char response, response3, response4;
+	fstream custFile;
 	
 	cout << "Cafe or Bookstore? " << endl;
 	cin >> choice;
@@ -122,14 +130,12 @@ int main(){
 				}
 			}
 
-			shotsCost = numOfShots * shotsExtra;
+			
 		}
 
-		total = bookPrice + price + shotsCost + total2;
-
-			
 	};
-
+	shotsCost = numOfShots * shotsExtra;
+	total = bookPrice + price + shotsCost + total2;
 	preTaxtotal = total;
 	totalTax = preTaxtotal * tax;
 	totalPrice = preTaxtotal + totalTax;
@@ -138,12 +144,14 @@ int main(){
 	cout << setprecision(2) << "Your total is: " << totalPrice << endl << endl;
 	cout << "Please enter your payment amount: " << endl;
 	cin >> payment;
+	cout << endl;
 
 	grace = totalPrice - 0.50;
 
 		if(payment > totalPrice){
 			
-			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, bookPrice, totalPrice, payment);
+			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, 
+			bookName, bookPrice, totalPrice, payment, change);
 
 			change = (payment - totalPrice);
 			cout << "Here's your change: " << endl << endl;
@@ -177,7 +185,8 @@ int main(){
 
 		if(payment == totalPrice){
 
-			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, bookPrice, totalPrice, payment);
+			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
+					bookPrice, totalPrice, payment, change);
 
 			cout << endl;
 			cout << "Thank you for your business! " << endl << endl;
@@ -210,7 +219,8 @@ int main(){
 
 		if(payment >= grace && payment < totalPrice){
 
-			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, bookPrice, totalPrice, payment);
+			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
+					bookPrice, totalPrice, payment, change);
 			
 			cout << endl;
 			cout << "No worries, I've got you this time." << endl << endl;
@@ -243,26 +253,28 @@ int main(){
 		if(payment < grace){
 			cout << "Sorry, maybe next time. " << endl;
 		};
-			 		
+		
+		
 	return 0;
 };
 
 void makeFile(string itemLabel, double price, int numOfShots, double shotsCost, double milkCost, 
-			  string bookName, double bookPrice, double totalPrice, int payment)
+			  string bookName, double bookPrice, double totalPrice, double payment, double change)
 {
 
 	fstream custFile;
 
-	custFile.open("Customer.txt");
+	custFile.open("Customer.txt", ios::out);
 
 	custFile << "Customer order history: " << endl;
 	custFile << "----------------------------" << endl;
-	custFile << "Beverage: " << itemLabel << ": " << price << endl;
-	custFile << "Extra shots: " << numOfShots << " = " << shotsCost << endl;
-	custFile << "Milk Alt: +" << milkCost << endl;
-	custFile << "Book(s): " << bookName << " = " << bookPrice << endl;
-	custFile << "Spendings: " << totalPrice << endl;
-	custFile << "Payment: " << payment << endl;
+	custFile << itemLabel << ":      $" << price << endl;
+	custFile << "Extra shots:   $" << shotsCost << endl;
+	custFile << "Milk Alt:      +" << milkCost << endl;
+	custFile << bookName << ":      $" << bookPrice << endl;
+	custFile << "Spendings:     $" << totalPrice << endl;
+	custFile << "Payment:       $" << payment << endl;
+	custFile << "Change:        $" << change << endl;
 
 	custFile.close();
 };
