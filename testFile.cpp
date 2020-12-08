@@ -12,8 +12,11 @@
 
 using namespace std;
 
-void makeFile(string, double, int, double, double, string, double, double, double, double);
+//This function is simply to create a file containing transaction information.
+void makeFile(string, double, int, double, double, 
+	string, double, double, double, double);
 
+//Class containing all of the variables and functions relating to books.
 class Books{
 	public:
 	int select, selection, num, bookSelect;
@@ -38,7 +41,7 @@ class Books{
 	string bookNames(int bookSelect);
 	void printBooks();
 };
-
+// Contains all the variables and functions relating to the cafe.
 class Coffee{
 	public:
 	int selection, num, choice;
@@ -82,15 +85,20 @@ int main(){
 	cin >> choice;
 
 	if(choice == "Cafe" || choice == "cafe" || choice == "Caf" || choice == "caf"){
+		// This function gets the customers order.
 		selection = caf.cafe();
+		// This function determines the price of selected item.
 		price = caf.prices(selection);
+		// This function determines the item name and puts it in the variable itemLabel.
 		itemLabel = caf.itemName(selection);
 
 		cout << "Would you like to modify your order?(Y/N): " << endl;
 		cin >> response;
 
 		if(response == 'Y' || response == 'y'){
+			// Ask user how many shots they want.
 			numOfShots = caf.numOfShot();
+			// Ask if the user wants a milk alternative.
 			milkAlt = caf.altMilk();
 		}
 
