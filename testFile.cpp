@@ -25,7 +25,7 @@ class Books{
 	string item, bookName;
 	fstream onfile;
 	
-
+	// Variables for holding onto strings from menu.
 	struct bookInfo{
 		string bookNum;
 		string title;
@@ -50,6 +50,7 @@ class Coffee{
 	char response20;
 	ifstream infile;
 	
+	//Variables for holding item info from menu file.
 	struct menuItem {
 		string itemNum;
 		string name;
@@ -81,9 +82,11 @@ int main(){
 	char response, response3, response4;
 	fstream custFile;
 	
+	// Gives the user the option to start either in the cafe or the bookstore.
 	cout << "Cafe or Bookstore? " << endl;
 	cin >> choice;
 
+	// An attempt to implement some resilience.
 	if(choice == "Cafe" || choice == "cafe" || choice == "Caf" || choice == "caf"){
 		// This function gets the customers order.
 		selection = caf.cafe();
@@ -95,9 +98,12 @@ int main(){
 		cout << "Would you like to modify your order?(Y/N): " << endl;
 		cin >> response;
 
+		// More attempted resilience.
 		if(response == 'Y' || response == 'y'){
+
 			// Ask user how many shots they want.
 			numOfShots = caf.numOfShot();
+
 			// Ask if the user wants a milk alternative.
 			milkAlt = caf.altMilk();
 		}
@@ -106,22 +112,33 @@ int main(){
 		cin >> response4;
 
 		if(response4 == 'Y' || response4 =='y'){
+
+			// This function prints the menu and retrieves the users selection.
 			bookSelect = book.bookStore();
+
+			// Using the users input, the next two function determine the price and name
+			// of the books and plugs them into the bookPrice and bookName variables.
 			bookPrice = book.bookPrices(bookSelect);
 			bookName = book.bookNames(bookSelect);
 		}
 
-		shotsCost = numOfShots * shotsExtra;
-		total = bookPrice + price + shotsCost;
 	}
+
+	// If the user chooses bookstore, the program will begin here.
 	else if(choice == "Bookstore" || choice == "bookstore" || choice == "book" || choice == "Book"){
+		
+		// These functions take the user through the bookstore portion of the simulation.
 		bookSelect = book.bookStore();
 		bookPrice = book.bookPrices(bookSelect);
 		bookName = book.bookNames(bookSelect);
+
+		// Giving the user the option to visit the cafe.
 		cout << "Would you like to go to the Cafe? (Y/N) " << endl;
 		cin >> response3;
 
 		if(response3 == 'Y' || response3 =='y'){
+
+			// Cafe portion of the simulation.
 			selection = caf.cafe();
 			price = caf.prices(selection);
 			itemLabel = caf.itemName(selection);
@@ -129,10 +146,19 @@ int main(){
 			cout << "Would you like to modify your order?(Y/N): " << endl;
 			cin >> response;
 
+			 
+			// If the user wants to alter their drink, the program takes them through
+			// these functions.
+			
 			if(response == 'Y' || response == 'y'){
+
+				// Asks how many extra shots user would like.
 				numOfShots = caf.numOfShot();
+
+				// Asks if user wants a milk alternative (Soy, Almond, etc).
 				milkAlt = caf.altMilk();
 
+				// If milk alternative is desirable, the cost is added to the total.
 				if(milkAlt == 'Y' || milkAlt =='y'){
 					total2 = milkCost;
 				}
@@ -142,28 +168,36 @@ int main(){
 		}
 
 	};
+
+	// Smattering of calculations that produce total and subtotal.
 	shotsCost = numOfShots * shotsExtra;
 	total = bookPrice + price + shotsCost + total2;
 	preTaxtotal = total;
 	totalTax = preTaxtotal * tax;
 	totalPrice = preTaxtotal + totalTax;
 
-	cout << fixed;
+	// Envoking "fixed" notation to avoid scientific output.
+	cout << std::fixed;
+
+	// Limiting output to two decimal places.
 	cout << setprecision(2) << "Your total is: " << totalPrice << endl << endl;
 	cout << "Please enter your payment amount: " << endl;
 	cin >> payment;
 	cout << endl;
 
+	// Grace is just extending kindness to those who are just short of the full payment.
 	grace = totalPrice - 0.50;
 
+		// If customer pays more than due amount this statement executes.
 		if(payment > totalPrice){
 			
+			// Create a file with all the transaction information.
 			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, 
 			bookName, bookPrice, totalPrice, payment, change);
 
+			// Calculating the change if customer play more than amount due.
 			change = (payment - totalPrice);
-			cout << "Here's your change: " << endl << endl;
-			cout << change << endl << endl;
+			cout << "Here's your change:   " << change << endl << endl;
 
 			cout << "##########################" << endl;
 			cout << "#### Printing Receipt ####" << endl;
@@ -191,6 +225,8 @@ int main(){
 			cout << "##########################" << endl;
 		};
 
+
+		// If customer pays the exact amount this statement executes.
 		if(payment == totalPrice){
 
 			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
@@ -225,6 +261,7 @@ int main(){
 			cout << "##########################" << endl;
 		};
 
+		// If the customer is short an amount within grace bounds this statement executes.
 		if(payment >= grace && payment < totalPrice){
 
 			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
@@ -258,6 +295,7 @@ int main(){
 			cout << "##########################" << endl;
 		};
 		
+		// If the customer is more than $0.50 short this statement executes.
 		if(payment < grace){
 			cout << "Sorry, maybe next time. " << endl;
 		};
@@ -270,12 +308,14 @@ void makeFile(string itemLabel, double price, int numOfShots, double shotsCost, 
 			  string bookName, double bookPrice, double totalPrice, double payment, double change)
 {
 
+
 	fstream custFile;
 
 	custFile.open("Customer.txt", ios::out);
 
+	// Inputting transaction information into created customer file.
 	custFile << "Customer order history: " << endl;
-	custFile << "----------------------------" << endl;
+	custFile << "------------------------" << endl;
 	custFile << itemLabel << ":      $" << price << endl;
 	custFile << "Extra shots:   $" << shotsCost << endl;
 	custFile << "Milk Alt:      +" << milkCost << endl;
@@ -291,6 +331,8 @@ void makeFile(string itemLabel, double price, int numOfShots, double shotsCost, 
 //Cafe defs.
 //
 
+// Making sure the user can't break the program with a simple fat finger.
+// If input doesn't match valid options the program asks for a different input.
 bool Coffee::validOrder(int selection){
 	
 	switch(selection){
@@ -308,6 +350,8 @@ bool Coffee::validOrder(int selection){
 			return false;
 	}
 }
+
+// Reads the menu csv and outputs the contents in a menu-like fashion.
 void Coffee::printMenu(){
 
 		string item;
@@ -316,8 +360,11 @@ void Coffee::printMenu(){
 		
 	infile.open("CafeMenu.csv", ios::in);
 		
-	int i = 0;
-	for(i= 0; i < 9; i++){
+	// Telling the computer to read the file up until it finds a comma.
+	// The program then inputs all that it has read up until the comma, (the "item"),
+	// into the corresponding menu variable. Starting with the item number
+	// and ending at "has_shots". "i" increments and repeats until i = 9.
+	for(int i= 0; i < 9; i++){
 		getline(infile,item,',');
 		menu[i].itemNum = item;
 		getline(infile, item, ',');
@@ -330,10 +377,14 @@ void Coffee::printMenu(){
 		menu[i].has_shots = item;
 		
 	}
+
+	// Just some fun touches.
 	cout << "#########################" << endl;
 	cout << "######### Menu ##########" << endl;
 	cout << "#########################" << endl;
 
+    // This loop outputs the retrieved menu information in a way the user can
+	// easily read.
 	for(int j = 0; j < 9; j++){
 		cout << "Item #:  " << menu[j].itemNum <<endl;
 		cout << "Name:   " << menu[j].name << endl;
@@ -345,6 +396,7 @@ void Coffee::printMenu(){
 	infile.close();
 };
 
+// Prints out the cafe menu and retrieves the users input.
 int Coffee::cafe(){
 
 	printMenu();
@@ -352,6 +404,7 @@ int Coffee::cafe(){
 	cout << "Please enter your order number here: " << endl;
 	cin >> selection;
 
+	// Iteration to make sure the user inputs a valid selection.
 	while(Coffee::validOrder(selection) == false){
 		cout << "Invalid Input. Please choose from the available options." << endl;
 		cin.clear();
@@ -361,6 +414,7 @@ int Coffee::cafe(){
 	return selection;
 };
 
+// Prompts user for desired extra shots and stores it in int "num".
 int Coffee::numOfShot(){
 	
 	cout << "How many extra shot(s)?" << endl;
@@ -369,6 +423,7 @@ int Coffee::numOfShot(){
 	return num;
 };
 
+// Prompts user about milk alternative and stores it in char "response20".
 char Coffee::altMilk(){
 	
 	cout << "Milk alternative?(Y/N): " << endl;
@@ -377,6 +432,8 @@ char Coffee::altMilk(){
 	return response20;
 };
 
+// Takes user input and checks it against available options and stores the 
+// corresponding string in "itemNames" for the receipt.
 string Coffee::itemName(int selection){
 
 	choice = selection;
@@ -412,6 +469,8 @@ string Coffee::itemName(int selection){
 	return itemNames;
 };
 
+// Takes user input and checks it against available options and stores the 
+// corresponding double in "price" for the receipt.
 double Coffee::prices(int selection){
 
 	choice = selection;
@@ -450,6 +509,8 @@ double Coffee::prices(int selection){
 //Books defs.
 //
 
+// Making sure the user can't break the program with a simple fat finger.
+// If input doesn't match valid options the program asks for a different input.
 bool Books::validInput(int bookSelect){
 	
 	switch(bookSelect){
@@ -468,6 +529,8 @@ bool Books::validInput(int bookSelect){
 			return false;
 	}
 }
+
+// Outputs the menu and retrieves the user input.
 int Books::bookStore(){
 
 	printBooks();
@@ -475,6 +538,7 @@ int Books::bookStore(){
 	cout << "Enter the number of the book you'd like to buy: " << endl;
 	cin >> bookSelect;
 
+	// As long as the user input in invalid, this statement will execute.
 	while(Books::validInput(bookSelect) == false){
 		cout << "Invalid input. Please choose from available options" << endl;
 		cin.clear();
@@ -485,6 +549,8 @@ int Books::bookStore(){
 	return bookSelect;
 };
 
+// Takes the users selection and stores the corresponding title 
+// inside bookName.
 string Books::bookNames(int bookSelect){
 
 	select = bookSelect;
@@ -523,6 +589,8 @@ string Books::bookNames(int bookSelect){
 	return bookName;
 };
 
+// Takes the users selection and stores corresponding price
+// in cost.
 double Books::bookPrices(int bookSelect){
 
 	select = bookSelect;
@@ -560,6 +628,9 @@ double Books::bookPrices(int bookSelect){
 		
 	return cost;
 };
+
+// This function takes the content of the library csv and 
+// prints it out on the screen.
 void Books::printBooks(){
 
 		fstream onfile;
@@ -568,8 +639,11 @@ void Books::printBooks(){
 
 	onfile.open("Library.csv", ios::in);
 		
-	int i = 0;
-	for(i = 0; i < 10; ++i){
+	// Telling the computer to read the file up until it finds a comma.
+	// The program then inputs all that it has read up until the comma, (the "item"),
+	// into the corresponding library variable. Starting with the item number
+	// and ending at price. "i" increments and repeats until i = 10.
+	for(int i = 0; i < 10; ++i){
 		getline(onfile, item, ',');
 		book[i].bookNum = item;
 		getline(onfile, item, ',');
@@ -587,6 +661,8 @@ void Books::printBooks(){
 	cout << "####### Choice Books ########" << endl;
 	cout << "#############################" << endl;
 
+	// This loop outputs the retrieved book information in a way the user can
+	// easily read.
 	for(int j = 0; j < 10; ++j){
 		cout << "Book #:  " << book[j].bookNum << endl;
 		cout << "Title:  " << book[j].title << endl;
@@ -599,4 +675,4 @@ void Books::printBooks(){
 
 	onfile.close();
 
-};
+}
