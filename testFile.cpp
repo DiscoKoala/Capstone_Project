@@ -1,8 +1,14 @@
-/* The point of this program is to simulate a trip to a cafe/bookstore.
-   The user is given the option of going to the cafe or the bookstore.
-   A list of options is given to the end user to choose from.
-   After the user chooses their desired options
-   the program compiles the cost and prints a reciept.*/
+/* 
+	This program simulates an interaction between a customer and an employee
+	of a cafe/bookstore. The customer chooses which portion of the store
+	they would like to visit. A list of available items is printed for the
+	customer to choose from. Once the customer has made their choice, 
+	they have the option of visiting the other portion or check out. At 
+	checkout, the customer is given the total cost and asked to input 
+	their payment amount. Once the payment is input, the program determines
+	if the amount is adequate, returns change if necessary, and produces
+	a receipt along with a log of the transaction.
+*/
 
 #include<iostream>
 #include<fstream>
@@ -15,6 +21,10 @@ using namespace std;
 //This function is simply to create a file containing transaction information.
 void makeFile(string, double, int, double, double, 
 	string, double, double, double, double);
+
+// This function intakes all the transaction information and output a receipt.
+void printReceipt(string, double, int, double, double, string, double,
+	double, double, double, double, double);
 
 //Class containing all of the variables and functions relating to books.
 class Books{
@@ -41,6 +51,7 @@ class Books{
 	string bookNames(int bookSelect);
 	void printBooks();
 };
+
 // Contains all the variables and functions relating to the cafe.
 class Coffee{
 	public:
@@ -197,37 +208,18 @@ int main(){
 
 			// Calculating the change if customer play more than amount due.
 			change = (payment - totalPrice);
-			cout << "Here's your change:   " << change << endl << endl;
+			cout << "Here's your change:   $" << change << endl << endl;
 
-			cout << "##########################" << endl;
-			cout << "#### Printing Receipt ####" << endl;
-			cout << "##########################" << endl << endl;
-			cout << itemLabel << ": $" << price << endl;
-			cout << "--------------------------" << endl;
-			cout << "Extra shots:" << " +" << numOfShots << " = $" << shotsCost << endl;
-			cout << "--------------------------" << endl;
-			cout << "Milk Alternative: " << "+$" << milkCost << endl;
-			cout << "--------------------------" << endl;
-			cout << bookName << " = $" << bookPrice << endl;
-			cout << "--------------------------" << endl;
-			cout << "Pre-tax total: $" << preTaxtotal << endl;
-			cout << "--------------------------" << endl;
-			cout << "Added tax: $" << totalTax << endl;
-			cout << "--------------------------" << endl;
-			cout << "Total cost: $" << totalPrice << endl;
-			cout << "--------------------------" << endl;
-			cout << "Payment: $" << payment << endl;
-			cout << "--------------------------" << endl;
-			cout << "Change: $" << change << endl;
-			cout << "--------------------------" << endl;
-			cout << "WiFi password: C0fFe3" << endl;
-			cout << "--------------------------" << endl << endl;
-			cout << "##########################" << endl;
+			// Takes all of the transaction information and puts it in a reciept.
+			printReceipt(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
+					bookPrice, totalPrice, payment, change, preTaxtotal, totalTax);
 		};
 
 
 		// If customer pays the exact amount this statement executes.
 		if(payment == totalPrice){
+
+			change = 0;
 
 			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
 					bookPrice, totalPrice, payment, change);
@@ -235,64 +227,23 @@ int main(){
 			cout << endl;
 			cout << "Thank you for your business! " << endl << endl;
 			
-			cout << "##########################" << endl;
-			cout << "#### Printing Receipt ####" << endl;
-			cout << "##########################" << endl << endl;
-			cout << itemLabel << ": $" << price << endl;
-			cout << "--------------------------" << endl;
-			cout << "Extra shots:" << " +" << numOfShots << " = $" << shotsCost << endl;
-			cout << "--------------------------" << endl;
-			cout << "Milk Alternative: " << "+$" << milkCost << endl;
-			cout << "--------------------------" << endl;
-			cout << bookName << " = $" << bookPrice << endl;
-			cout << "--------------------------" << endl;
-			cout << "Pre-tax total: $" << preTaxtotal << endl;
-			cout << "--------------------------" << endl;
-			cout << "Added tax: $" << totalTax << endl;
-			cout << "--------------------------" << endl;
-			cout << "Total cost: $" << totalPrice << endl;
-			cout << "--------------------------" << endl;
-			cout << "Payment: $" << payment << endl;
-			cout << "--------------------------" << endl;
-			cout << "Change: $" << change << endl;
-			cout << "--------------------------" << endl;
-			cout << "WiFi password: C0fFe3" << endl;
-			cout << "--------------------------" << endl << endl;
-			cout << "##########################" << endl;
+		printReceipt(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
+					bookPrice, totalPrice, payment, change, preTaxtotal, totalTax);
 		};
 
-		// If the customer is short an amount within grace bounds this statement executes.
+		// If the customer is short $0.50 or less this statement executes.
 		if(payment >= grace && payment < totalPrice){
+
+			change = 0;
 
 			makeFile(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
 					bookPrice, totalPrice, payment, change);
 			
 			cout << endl;
 			cout << "No worries, I've got you this time." << endl << endl;
-			cout << "##########################" << endl;
-			cout << "#### Printing Receipt ####" << endl;
-			cout << "##########################" << endl << endl;
-			cout << itemLabel << ": $" << price << endl;
-			cout << "--------------------------" << endl;
-			cout << "Extra shots:" << " +" << numOfShots << " = $" << shotsCost << endl;
-			cout << "--------------------------" << endl;
-			cout << "Milk Alternative: " << "+" << milkCost << endl;
-			cout << "--------------------------" << endl;
-			cout << bookName << " = " << bookPrice << endl;
-			cout << "--------------------------" << endl;
-			cout << "Pre-tax total: $" << preTaxtotal << endl;
-			cout << "--------------------------" << endl;
-			cout << "Added tax: $" << totalTax << endl;
-			cout << "--------------------------" << endl;
-			cout << "Total cost: $" << totalPrice << endl;
-			cout << "--------------------------" << endl;
-			cout << "Payment: $" << payment << endl;
-			cout << "--------------------------" << endl;
-			cout << "Change: $" << change << endl;
-			cout << "--------------------------" << endl;
-			cout << "WiFi password: C0fFe3" << endl;
-			cout << "--------------------------" << endl << endl;
-			cout << "##########################" << endl;
+			
+			printReceipt(itemLabel, price, numOfShots, shotsCost, milkCost, bookName, 
+					bookPrice, totalPrice, payment, change, preTaxtotal, totalTax);
 		};
 		
 		// If the customer is more than $0.50 short this statement executes.
@@ -304,6 +255,37 @@ int main(){
 	return 0;
 };
 
+void printReceipt(string itemLabel, double price, int numOfShots, double shotsCost, double milkCost, 
+			      string bookName, double bookPrice, double totalPrice, double payment, double change,
+				  double preTaxtotal, double totalTax){
+
+			cout << "##############################" << endl;
+			cout << "###### Printing Receipt ######" << endl;
+			cout << "##############################" << endl << endl;
+			cout << itemLabel << ": $" << price << endl;
+			cout << "------------------------------" << endl;
+			cout << "Extra shots:" << " +" << numOfShots << " = $" << shotsCost << endl;
+			cout << "------------------------------" << endl;
+			cout << "Milk Alternative: " << "+" << milkCost << endl;
+			cout << "------------------------------" << endl;
+			cout << bookName << " = $" << bookPrice << endl;
+			cout << "------------------------------" << endl;
+			cout << "Pre-tax total: $" << preTaxtotal << endl;
+			cout << "------------------------------" << endl;
+			cout << "Added tax: $" << totalTax << endl;
+			cout << "------------------------------" << endl;
+			cout << "Total cost: $" << totalPrice << endl;
+			cout << "------------------------------" << endl;
+			cout << "Payment: $" << payment << endl;
+			cout << "------------------------------" << endl;
+			cout << "Change: $" << change << endl;
+			cout << "------------------------------" << endl;
+			cout << "WiFi password: C0fFe3" << endl;
+			cout << "------------------------------" << endl << endl;
+			cout << "##############################" << endl;
+				
+};
+
 void makeFile(string itemLabel, double price, int numOfShots, double shotsCost, double milkCost, 
 			  string bookName, double bookPrice, double totalPrice, double payment, double change)
 {
@@ -312,17 +294,25 @@ void makeFile(string itemLabel, double price, int numOfShots, double shotsCost, 
 	fstream custFile;
 
 	custFile.open("Customer.txt", ios::out);
-
-	// Inputting transaction information into created customer file.
-	custFile << "Customer order history: " << endl;
-	custFile << "------------------------" << endl;
-	custFile << itemLabel << ":      $" << price << endl;
-	custFile << "Extra shots:   $" << shotsCost << endl;
-	custFile << "Milk Alt:      +" << milkCost << endl;
-	custFile << bookName << ":      $" << bookPrice << endl;
-	custFile << "Spendings:     $" << totalPrice << endl;
-	custFile << "Payment:       $" << payment << endl;
-	custFile << "Change:        $" << change << endl;
+	
+	// Inputting transaction information into created customer file. Numerical values
+	// are right justified.
+	custFile << "    Customer order history:    " << endl;
+	custFile << "-------------------------------" << endl;
+	custFile << itemLabel << ":" << endl;
+	custFile << setw(25) << "$" << price << endl;
+	custFile << "Extra shots:" << endl;
+	custFile << setw(25) << right <<  "$" << shotsCost << endl;
+	custFile << "Milk Alt:" << endl;
+	custFile << setw(25) << right << "+" << milkCost << endl;
+	custFile << bookName << ":" << endl;
+	custFile << setw(25) << right << "$" << bookPrice << endl;
+	custFile << "Spendings:" << endl;
+	custFile << setw(25) << right << "$" << setprecision(4) << totalPrice << endl;
+	custFile << "Payment:" << endl;
+	custFile << setw(25) << right << "$" << payment << endl;
+	custFile << "Change:" << endl;
+	custFile << setw(25) << right << "$" << std::fixed << setprecision(4) << change << endl;
 
 	custFile.close();
 };
